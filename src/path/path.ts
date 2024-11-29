@@ -8,12 +8,12 @@ export class Path {
     this.nodes.push(startNode);
   }
 
-  public addNode(node: GridNode) {
+  public addNode(node: GridNode): void {
     this.nodes.push(node);
   }
 
   public getCurrentNode(): GridNode {
-    return this.nodes[this.nodes.length - 1];
+    return this.nodes[this.nodes.length - 1] as GridNode;
   }
 
   public getNodes(): GridNode[] {
@@ -21,7 +21,7 @@ export class Path {
   }
 
   public getLatestDirection(): Direction | null {
-    const currentPosition = this.nodes[this.nodes.length - 1].getPosition();
+    const currentPosition = this.getCurrentNode().getPosition();
     const previousNode = this.nodes[this.nodes.length - 2];
 
     if (!previousNode) return null;
@@ -35,6 +35,6 @@ export class Path {
       if (currentPosition.row === previousPostion.row + 1) return Direction.DOWN;
       if (currentPosition.row === previousPostion.row - 1) return Direction.UP;
     }
-    throw 'The last two nodes on the path are not neighbors';
+    throw new Error('The last two nodes on the path are not neighbors');
   }
 }

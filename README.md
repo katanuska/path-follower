@@ -1,4 +1,4 @@
-# Code Challenge
+# Path follower
 
 Follow a path of characters & collect letters:
 
@@ -6,10 +6,6 @@ Follow a path of characters & collect letters:
 - Follow the path
 - Collect letters
 - Stop when you reach the character `x`
-
-## Assignment
-
-Write a piece of code that takes a map of characters as an input and outputs the collected letters and the list of characters of the travelled path.
 
 Input:
 
@@ -19,6 +15,16 @@ Output:
 
 - Collected letters
 - Path as characters
+
+## Start 
+**Run the path follower**:
+- run `npm install`
+- create your path map in file `map.txt`
+- run `npm run build` and  `npm start`
+
+**Run tests:**
+- `npm run test`
+
 
 ## Specifications
 

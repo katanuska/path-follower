@@ -11,29 +11,29 @@ const LETTERS_REGEX = /[A-Z]/;
 const SUPPORTED_GRID_CHARACTERS_REGEX = /^[A-Z@x+\-| \n]+$/;
 const SUPPORTED_PATH_CHARACTERS_REGEX = /[A-Z@x+\-|]/;
 
-function isSupportedCharacter(character: string | undefined) {
-  return character && character != ' ' && SUPPORTED_PATH_CHARACTERS_REGEX.test(character);
+function isSupportedPathCharacter(character: string | undefined): boolean {
+  return character != undefined && SUPPORTED_PATH_CHARACTERS_REGEX.test(character);
 }
 
-function validateGridCharacters(grid: Grid) {
-  if (!SUPPORTED_GRID_CHARACTERS_REGEX.test(grid.toString())) throw 'There are unsuported characters on the map.';
+function validateGridCharacters(grid: Grid): void {
+  if (!SUPPORTED_GRID_CHARACTERS_REGEX.test(grid.toString())) throw new Error('There are unsuported characters on the map.');
 }
 
 function findStart(grid: Grid): GridNode {
   const startPositions: Position[] = grid.findCaracter(START_CHARACTER);
 
-  if (!startPositions?.length) throw 'The start of this path was not found.';
-  if (startPositions.length > 1) throw 'This path has more than one start.';
+  if (startPositions[0] === undefined) throw new Error('The start of this path was not found.');
+  if (startPositions.length > 1) throw new Error('This path has more than one start.');
 
   return new GridNode(grid, startPositions[0]);
 }
 
-function findPossibleDirections(currentCharacter: string, previousDirection: Direction | null) {
+function findPossibleDirections(currentCharacter: string, previousDirection: Direction | null): Direction[] {
   if (currentCharacter === START_CHARACTER) {
     return Object.values(Direction);
   }
 
-  if (!previousDirection) throw 'I forgot which direction I was going.';
+  if (!previousDirection) throw new Error('I forgot which direction I was going.');
 
   if (currentCharacter === INTERSECTION_CHARACTER) {
     return getDirectionAfterIntersection(previousDirection);
@@ -52,13 +52,13 @@ function findNextNode(path: Path): GridNode {
   let possibleDirections = findPossibleDirections(currentNode.getCharacter(), latestDirection);
   const possibleNewNodes = possibleDirections
     .map((direction) => currentNode.getNodeNeighbor(direction))
-    .filter((node) => node && isSupportedCharacter(node.getCharacter()));
+    .filter((node) => node && isSupportedPathCharacter(node.getCharacter()));
 
   if (!possibleNewNodes.length) {
-    throw 'The path you followed leads nowhere.';
+    throw new Error('The path you followed leads nowhere.');
   }
   if (possibleNewNodes.length > 1 && !LETTERS_REGEX.test(currentNode.getCharacter())) {
-    throw "There is a fork on my path. I don't know which way to go.";
+    throw new Error("There is a fork on my path. I don't know which way to go.");
   }
 
   return possibleNewNodes[0]!;

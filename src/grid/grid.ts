@@ -10,7 +10,7 @@ export class Grid {
   public findCaracter(character: string): Position[] {
     const characterPositions = [];
     for (let row = 0; row < this.grid.length; row++) {
-      for (let col = 0; col < this.grid[row].length; col++) {
+      for (let col = 0; col < (this.grid[row]?.length || 0); col++) {
         if (this.get({ row, col }) === character) {
           characterPositions.push({ row, col });
         }
